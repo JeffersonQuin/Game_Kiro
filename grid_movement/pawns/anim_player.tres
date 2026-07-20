@@ -1,0 +1,57 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://ris4f8p1qn68"]
+
+[ext_resource type="Texture2D" uid="uid://dsg2ebrj67yyv" path="res://grid_movement/pawns/player_exploration_bump.png" id="1_j46su"]
+[ext_resource type="Texture2D" uid="uid://c7b3o76ihu07e" path="res://grid_movement/pawns/player_exploration3.png" id="2_j46su"]
+[ext_resource type="Texture2D" uid="uid://ddt4apnx1xoi2" path="res://grid_movement/pawns/player_exploration.png" id="4_bqajb"]
+[ext_resource type="Texture2D" uid="uid://b7do5hw1w4ur4" path="res://grid_movement/pawns/player_exploration_left.png" id="4_vs3rj"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_j46su")
+}],
+"loop": 0,
+"name": &"bump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_j46su")
+}],
+"loop": 0,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_j46su")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_vs3rj")
+}],
+"loop": 0,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_j46su")
+}],
+"loop": 0,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_bqajb")
+}],
+"loop": 0,
+"name": &"up",
+"speed": 5.0
+}]
