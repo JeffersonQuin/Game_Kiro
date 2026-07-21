@@ -1,11 +1,11 @@
 class_name RoomManager
 extends Node2D
 
+const TileVisualResolver = preload("res://grid_movement/tile_visual_resolver.gd")
+
 const ROOM_WIDTH := 20
 const ROOM_HEIGHT := 10
 const ROOM_COUNT := 5
-const OBSTACLE_SOURCES := [1, 3, 4, 5, 6, 7, 8, 9, 10]
-
 @onready var ground: TileMapLayer = $Ground
 @onready var pathways: TileMapLayer = $Pathways
 @onready var grid: Grid = $Grid
@@ -69,11 +69,14 @@ func _render_room(room_id: int, player_cell: Vector2i) -> void:
 	for y in ROOM_HEIGHT:
 		for x in ROOM_WIDTH:
 			var cell := Vector2i(x, y)
-			ground.set_cell(cell, 0, Vector2i.ZERO, rng.randi_range(0, 7))
+			var ground_tile: Dictionary = TileVisualResolver.resolve_ground(rng)
+			ground.set_cell(cell, ground_tile.source, Vector2i.ZERO, ground_tile.alternative)
 			if cells[y][x] == 0:
-				pathways.set_cell(cell, _path_source(cell, cells), Vector2i.ZERO, rng.randi_range(0, 7))
+				var path_tile: Dictionary = TileVisualResolver.resolve_path(cell, cells, ROOM_WIDTH, ROOM_HEIGHT, rng)
+				pathways.set_cell(cell, path_tile.source, Vector2i.ZERO, path_tile.alternative)
 			else:
-				grid.set_cell(cell, OBSTACLE_SOURCES[rng.randi_range(0, OBSTACLE_SOURCES.size() - 1)], Vector2i.ZERO, rng.randi_range(0, 7))
+				var obstacle_tile: Dictionary = TileVisualResolver.resolve_obstacle(cell, cells, ROOM_WIDTH, ROOM_HEIGHT, rng)
+				grid.set_cell(cell, obstacle_tile.source, Vector2i.ZERO, obstacle_tile.alternative)
 	player.position = grid.map_to_local(player_cell)
 	grid.set_cell(player_cell, CellType.Type.ACTOR, Vector2i.ZERO)
 	_place_room_entities(room_id)
@@ -103,17 +106,6 @@ func _first_open_cell(room_id: int, preferred: Vector2i) -> Vector2i:
 				if cells[y][x] == 0:
 					return Vector2i(x, y)
 	return Vector2i(1, 1)
-
-
-func _path_source(cell: Vector2i, cells: Array) -> int:
-	var neighbors := 0
-	for direction: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
-		var check: Vector2i = cell + direction
-		if check.x >= 0 and check.x < ROOM_WIDTH and check.y >= 0 and check.y < ROOM_HEIGHT and cells[check.y][check.x] == 0:
-			neighbors += 1
-	if neighbors <= 1:
-		return 3
-	return 2 if rng.randf() < 0.7 else rng.randi_range(0, 1)
 
 
 func _interior_cell(door: Vector2i) -> Vector2i:
